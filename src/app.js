@@ -2,12 +2,11 @@ const fs = require('fs');
 const path = require('path');
 const users = require('./users');
 
-const dirs = [
-    path.join(__dirname, 'mansYounger20'),
-    path.join(__dirname, 'mans20AndOlder'),
-    path.join(__dirname, 'womensYounger20'),
-    path.join(__dirname, 'womens20AndOlder')
-];
+const mansYounger20 = path.join(__dirname, 'mansYounger20');
+const mans20AndOlder = path.join(__dirname, 'mans20AndOlder');
+const womensYounger20 = path.join(__dirname, 'womensYounger20');
+const womens20AndOlder = path.join(__dirname, 'womens20AndOlder');
+const dirs = [mansYounger20, mans20AndOlder, womensYounger20, womens20AndOlder];
 const promises = [];
 
 dirs.forEach(dir => {
@@ -30,15 +29,15 @@ Promise.all(promises).then(results => {
 
         if (user.gender === 'male') {
             if (user.age < 20) {
-                dir = dirs[0];
+                dir = mansYounger20;
             } else {
-                dir = dirs[1];
+                dir = mans20AndOlder;
             }
         } else if (user.gender === 'female') {
             if (user.age < 20) {
-                dir = dirs[2];
+                dir = womensYounger20;
             } else {
-                dir = dirs[3];
+                dir = womens20AndOlder;
             }
         }
 
