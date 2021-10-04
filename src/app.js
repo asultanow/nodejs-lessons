@@ -52,12 +52,11 @@ function createFile(dir, user) {
     const file = `${user.name.toLowerCase()}.json`;
 
     fs.writeFile(path.join(dir, file), JSON.stringify(user, null, 2), err => {
-            if (err) {
-                console.log(err);
-                return;
-            }
-
-            console.log(`file "${file}" created in directory "${dir}"`);
+        if (err) {
+            console.log(err);
+            return;
         }
-    );
+
+        console.log(`file "${file}" created in directory "${dir}"`);
+    });
 }
