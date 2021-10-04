@@ -1,11 +1,13 @@
 const fs = require('fs');
 const path = require('path');
+
 const users = require('./users');
 
 const mansYounger20 = path.join(__dirname, 'mansYounger20');
 const mans20AndOlder = path.join(__dirname, 'mans20AndOlder');
 const womensYounger20 = path.join(__dirname, 'womensYounger20');
 const womens20AndOlder = path.join(__dirname, 'womens20AndOlder');
+
 const dirs = [mansYounger20, mans20AndOlder, womensYounger20, womens20AndOlder];
 const promises = [];
 
@@ -21,39 +23,44 @@ dirs.forEach(dir => {
     }));
 });
 
-Promise.all(promises).then(results => {
-    results.forEach(result => console.log(result));
+Promise.allSettled(promises).then(results => {
+    results.forEach(result => console.log(result.value));
 
     users.forEach(user => {
-        let dir;
-
         if (user.gender === 'male') {
             if (user.age < 20) {
-                dir = mansYounger20;
-            } else {
-                dir = mans20AndOlder;
+                createFile(mansYounger20, user);
+                return;
             }
-        } else if (user.gender === 'female') {
-            if (user.age < 20) {
-                dir = womensYounger20;
-            } else {
-                dir = womens20AndOlder;
-            }
+
+            createFile(mans20AndOlder, user);
+            return;
         }
 
-        const file = `${user.name.toLowerCase()}.json`;
-
-        fs.writeFile(
-            path.join(dir, file),
-            JSON.stringify(user, null, 2),
-            err => {
-                if (err) {
-                    console.log(err);
-                    return;
-                }
-
-                console.log(`file "${file}" created in directory "${dir}"`);
+        if (user.gender === 'female') {
+            if (user.age < 20) {
+                createFile(womensYounger20, user);
+                return;
             }
-        );
+
+            createFile(womens20AndOlder, user);
+        }
     });
 }).catch(err => console.log(err));
+
+function createFile(dir, user) {
+    const file = `${user.name.toLowerCase()}.json`;
+
+    fs.writeFile(
+        path.join(dir, file),
+        JSON.stringify(user, null, 2),
+        err => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+
+            console.log(`file "${file}" created in directory "${dir}"`);
+        }
+    );
+}
