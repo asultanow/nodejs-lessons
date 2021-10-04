@@ -22,8 +22,8 @@ foldersForWriting.forEach(folder => {
     }));
 });
 
-Promise.all(promises).then(results => {
-    results.forEach(result => console.log(result));
+Promise.allSettled(promises).then(results => {
+    results.forEach(result => console.log(result.value));
 
     foldersForReading.forEach(folder => {
         fs.readdir(folder, (err, files) => {
