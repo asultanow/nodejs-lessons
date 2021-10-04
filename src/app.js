@@ -51,10 +51,7 @@ Promise.allSettled(promises).then(results => {
 function createFile(dir, user) {
     const file = `${user.name.toLowerCase()}.json`;
 
-    fs.writeFile(
-        path.join(dir, file),
-        JSON.stringify(user, null, 2),
-        err => {
+    fs.writeFile(path.join(dir, file), JSON.stringify(user, null, 2), err => {
             if (err) {
                 console.log(err);
                 return;
