@@ -1,32 +1,17 @@
 [
   {
+    "id": 1,
+    "name": "Olga",
+    "age": "23"
+  },
+  {
     "id": 2,
-    "name": "Bob",
-    "age": "32"
+    "name": "Ivan",
+    "age": "35"
   },
   {
-    "id": 5,
-    "name": "Julia",
-    "age": "25"
-  },
-  {
-    "id": 6,
-    "name": "Kate",
-    "age": "22"
-  },
-  {
-    "id": 7,
-    "name": "Lisa",
-    "age": "32"
-  },
-  {
-    "id": 9,
-    "name": "Alex",
-    "age": "30"
-  },
-  {
-    "id": 10,
-    "name": "John",
-    "age": "45"
+    "id": 3,
+    "name": "Anna",
+    "age": "28"
   }
 ]

@@ -1,54 +1,48 @@
-const { readUsers, writeUsers } = require('../helpers/main');
+const { readUsers, writeUsers } = require('../helpers/main.helper');
 
 exports.getUsers = (req, res) => {
-    readUsers().then(users => {
-        console.log(users);
-        res.json(users);
-    });
+    readUsers()
+        .then(users => res.json(users))
+        .catch(err => {
+            console.log(err);
+            res.json('failed');
+        });
 };
 
 exports.getUserById = (req, res) => {
-    readUsers().then(users => {
-        console.log(users);
+    readUsers()
+        .then(users => {
+            const user = users.find(user => user.id === +req.params.userId);
 
-        res.json(users);
-    });
-
-    console.log(req.params);
-
-    res.json(200);
+            res.json(user);
+        })
+        .catch(err => {
+            console.log(err);
+            res.json('failed');
+        });
 };
 
 exports.createUser = (req, res) => {
-    console.log(req.params);
-    console.log(req.body);
-
     readUsers()
         .then(users => {
-            console.log(users);
+            const id = users.length ? users.sort((a, b) => a.id - b.id)[users.length - 1].id + 1 : 1;
+            const user = { id, ...req.body };
 
-            const id = users.length ? users.sort((a, b) => b.id - a.id)[0].id + 1 : 1;
-            const user = {...req.body, id};
-
-            console.log(user);
             users.push(user);
-            users.sort((a, b) => a.id - b.id);
 
             return writeUsers(users);
         })
-        .then(() => res.json('succeed'));
+        .then(() => res.json('succeeded'))
+        .catch(err => {
+            console.log(err);
+            res.json('failed');
+        });
 };
 
 exports.updateUser = (req, res) => {
-    console.log(req.params);
-    console.log(req.body);
-
     readUsers()
         .then(users => {
-            console.log(users);
-
             const updatedUsers = users.map(user => {
-                // user.id === req.params.userId ? {...user, ...req.body} : user
                 if (user.id === +req.params.userId) {
                     return {
                         id: user.id,
@@ -60,26 +54,25 @@ exports.updateUser = (req, res) => {
                 return user;
             });
 
-            console.log(updatedUsers);
-
             return writeUsers(updatedUsers);
         })
-        .then(() => res.json('succeed'));
+        .then(() => res.json('succeeded'))
+        .catch(err => {
+            console.log(err);
+            res.json('failed');
+        });
 };
 
 exports.deleteUser = (req, res) => {
-    console.log(req.params);
-    console.log(req.body);
-
     readUsers()
         .then(users => {
-            console.log(users);
-
             const updatedUsers = users.filter(user => user.id !== +req.params.userId);
-
-            console.log(updatedUsers);
 
             return writeUsers(updatedUsers);
         })
-        .then(() => res.json('succeed'));
+        .then(() => res.json('succeeded'))
+        .catch(err => {
+            console.log(err);
+            res.json('failed');
+        });
 };
