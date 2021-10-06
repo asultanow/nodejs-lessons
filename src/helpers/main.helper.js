@@ -1,12 +1,11 @@
 const fs = require('fs');
 const path = require('path');
 
+const filePath = path.join(__dirname, '..', 'dataBase', 'users.json');
+
 exports.readUsers = () => {
     return new Promise((resolve, reject) => {
-        fs.readFile(
-            path.join(__dirname, '..', 'dataBase', 'users.json'),
-            {encoding: 'utf8'},
-            (err, data) => {
+        fs.readFile(filePath, {encoding: 'utf8'}, (err, data) => {
                 if (err) {
                     reject(err);
                 }
@@ -20,10 +19,7 @@ exports.readUsers = () => {
 
 exports.writeUsers = users => {
     return new Promise((resolve, reject) => {
-        fs.writeFile(
-            path.join(__dirname, '..', 'dataBase', 'users.json'),
-            JSON.stringify(users, null, 2),
-            err => {
+        fs.writeFile(filePath, JSON.stringify(users, null, 2), err => {
                 if (err) {
                     reject(err);
                 }
