@@ -1,20 +1,7 @@
 const User = require('../dataBase/User');
 
-exports.login = async (req, res) => {
-    try {
-        const user = await User.findOne({
-            email: req.body.email,
-            password: req.body.password
-        });
-
-        if (!user) {
-            throw new Error('wrong email or password');
-        }
-
-        res.json('authorized');
-    } catch (err) {
-        res.json(err.message);
-    }
+exports.logIn = (req, res) => {
+    res.json('authorized');
 };
 
 exports.getUsers = async (req, res) => {
