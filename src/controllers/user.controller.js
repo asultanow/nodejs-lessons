@@ -14,15 +14,8 @@ exports.getUsers = async (req, res) => {
     }
 };
 
-exports.getUserById = async (req, res) => {
-    try {
-        const { userId } = req.params;
-        const user = await User.findById(userId);
-
-        res.json(user);
-    } catch (err) {
-        res.json(err.message);
-    }
+exports.getUserById = (req, res) => {
+    res.json(req.user);
 };
 
 exports.createUser = async (req, res) => {

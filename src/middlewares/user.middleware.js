@@ -38,6 +38,7 @@ exports.verifyUserId = async (req, res, next) => {
             throw new Error('wrong ID');
         }
 
+        req.user = user;
         next();
     } catch (err) {
         res.json(err.message);
