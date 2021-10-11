@@ -1,6 +1,6 @@
 const User = require('../dataBase/User');
 const { compare } = require('../services/password.service');
-const { userValidator, userNameValidator } = require('../validators/user.validator');
+const { userValidator, userUpdateValidator, userLoginValidator } = require('../validators/user.validator');
 
 exports.validateUser = (req, res, next) => {
     try {
@@ -33,9 +33,9 @@ exports.validateUserEmail = async (req, res, next) => {
     }
 };
 
-exports.validateUserName = (req, res, next) => {
+exports.validateUserUpdate = (req, res, next) => {
     try {
-        const { error, value } = userNameValidator.validate(req.body);
+        const { error, value } = userUpdateValidator.validate(req.body);
 
         if (error) {
             throw new Error(error.details[0].message);
@@ -49,7 +49,23 @@ exports.validateUserName = (req, res, next) => {
     }
 };
 
-exports.validateUserLogin = async (req, res, next) => {
+exports.validateUserLogin = (req, res, next) => {
+    try {
+        const { error, value } = userLoginValidator.validate(req.body);
+
+        if (error) {
+            throw new Error('wrong email or password');
+        }
+
+        req.body = value;
+
+        next();
+    } catch (err) {
+        res.json(err.message);
+    }
+};
+
+exports.confirmUserLogin = async (req, res, next) => {
     try {
         const { email, password } = req.body;
         const user = await User.findOne({ email }).select('password');

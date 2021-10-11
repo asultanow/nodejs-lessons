@@ -23,12 +23,11 @@ exports.userValidator = Joi.object({
         .regex(PASSWORD_REGEXP),
     role: Joi
         .string()
-        .required()
         .trim()
         .allow(...Object.values(userRoles))
 });
 
-exports.userNameValidator = Joi.object({
+exports.userUpdateValidator = Joi.object({
     name: Joi
         .string()
         .required()
@@ -36,4 +35,17 @@ exports.userNameValidator = Joi.object({
         .alphanum()
         .min(2)
         .max(30)
+});
+
+exports.userLoginValidator = Joi.object({
+    email: Joi
+        .string()
+        .required()
+        .trim()
+        .regex(EMAIL_REGEXP),
+    password: Joi
+        .string()
+        .required()
+        .trim()
+        .regex(PASSWORD_REGEXP)
 });

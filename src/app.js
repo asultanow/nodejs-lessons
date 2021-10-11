@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const { MONGODB_CONNECT_URL, PORT } = require('./configs/config');
 const userRouter = require('./routes/user.router');
 const { logIn } = require('./controllers/user.controller');
-const { validateUserLogin } = require('./middlewares/user.middleware');
+const { validateUserLogin, confirmUserLogin } = require('./middlewares/user.middleware');
 
 const app = express();
 
@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/users', userRouter);
-app.post('/auth', validateUserLogin, logIn);
+app.post('/auth', validateUserLogin, confirmUserLogin, logIn);
 
 app.listen(PORT, () => {
     console.log(`server is listening on port ${PORT}`);

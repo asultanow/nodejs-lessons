@@ -24,7 +24,7 @@ exports.createUser = async (req, res) => {
     try {
         const hashedPassword = await hash(req.body.password);
         const user = await User.create({ ...req.body, password: hashedPassword });
-        const normalizedUser = normalizeUser(JSON.parse(JSON.stringify(user)));
+        const normalizedUser = normalizeUser(user);
 
         res.json(normalizedUser);
     } catch (err) {
@@ -47,8 +47,9 @@ exports.deleteUser = async (req, res) => {
     try {
         const { userId } = req.params;
         const user = await User.findByIdAndDelete(userId);
+        const normalizedUser = normalizeUser(user);
 
-        res.json(user);
+        res.json(normalizedUser);
     } catch (err) {
         res.json(err.message);
     }

@@ -22,6 +22,7 @@ const userSchema = new Schema({
     },
     role: {
         type: String,
+        trim: true,
         default: userRoles.USER,
         enum: Object.values(userRoles)
     },
