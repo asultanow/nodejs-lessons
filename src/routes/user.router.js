@@ -1,13 +1,36 @@
-const router = require('express').Router();
+const userRouter = require('express').Router();
 
-const { getUsers, getUserById, createUser, updateUser, deleteUser } = require('../controllers/user.controller');
-const { validateUser, validateUserUpdate, validateUserEmail, validateUserId } = require('../middlewares/user.middleware');
+const {
+    userController: {
+        getUsers,
+        getUserById,
+        createUser,
+        updateUser,
+        deleteUser
+    }
+} = require('../controllers');
 
-router.get('/', getUsers);
-router.post('/', validateUser, validateUserEmail, createUser);
+const {
+    userMiddleware: {
+        createReqBodyValidationMiddleware,
+        validateUserEmail,
+        validateUserId
+    }
+} = require('../middlewares');
 
-router.get('/:userId', validateUserId, getUserById);
-router.put('/:userId', validateUserUpdate, validateUserId, updateUser);
-router.delete('/:userId', validateUserId, deleteUser);
+const { userToCreateValidator, userToUpdateValidator } = require('../validators/user.validator');
 
-module.exports = router;
+const validateUserToCreate = createReqBodyValidationMiddleware({ validator: userToCreateValidator });
+
+const validateUserToUpdate = createReqBodyValidationMiddleware({ validator: userToUpdateValidator });
+
+userRouter.route('/')
+    .get(getUsers)
+    .post(validateUserToCreate, validateUserEmail, createUser);
+
+userRouter.route('/:userId')
+    .get(validateUserId, getUserById)
+    .put(validateUserToUpdate, validateUserId, updateUser)
+    .delete(validateUserId, deleteUser);
+
+module.exports = userRouter;

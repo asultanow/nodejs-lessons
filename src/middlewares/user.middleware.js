@@ -1,21 +1,21 @@
 const User = require('../dataBase/User');
-const { compare } = require('../services/password.service');
-const { userValidator, userUpdateValidator, userLoginValidator } = require('../validators/user.validator');
+const Err = require('../errors/Err');
 
-exports.validateUser = (req, res, next) => {
-    try {
-        const { error, value } = userValidator.validate(req.body);
+exports.createReqBodyValidationMiddleware = ({ validator, errStatus, errMessage }) => (req, res, next) => {
+    const { error, value } = validator.validate(req.body);
 
-        if (error) {
-            throw new Error(error.details[0].message);
-        }
+    if (error) {
+        const message = errMessage || error.details[0].message;
+        const status = errStatus || 400;
 
-        req.body = value;
+        next(new Err(status, message));
 
-        next();
-    } catch (err) {
-        res.json(err.message);
+        return;
     }
+
+    req.body = value;
+
+    next();
 };
 
 exports.validateUserEmail = async (req, res, next) => {
@@ -24,76 +24,34 @@ exports.validateUserEmail = async (req, res, next) => {
         const user = await User.findOne({ email });
 
         if (user) {
-            throw new Error('email already exists');
+            next(new Err(400, 'email already exists'));
+
+            return;
         }
 
         next();
     } catch (err) {
-        res.json(err.message);
+
+        next(new Err(500, err.message));
     }
 };
-
-exports.validateUserUpdate = (req, res, next) => {
-    try {
-        const { error, value } = userUpdateValidator.validate(req.body);
-
-        if (error) {
-            throw new Error(error.details[0].message);
-        }
-
-        req.body = value;
-
-        next();
-    } catch (err) {
-        res.json(err.message);
-    }
-};
-
-exports.validateUserLogin = (req, res, next) => {
-    try {
-        const { error, value } = userLoginValidator.validate(req.body);
-
-        if (error) {
-            throw new Error('wrong email or password');
-        }
-
-        req.body = value;
-
-        next();
-    } catch (err) {
-        res.json(err.message);
-    }
-};
-
-exports.confirmUserLogin = async (req, res, next) => {
-    try {
-        const { email, password } = req.body;
-        const user = await User.findOne({ email }).select('password');
-
-        if (!user) {
-            throw new Error('wrong email or password');
-        }
-
-        const { password: hashedPassword } = user;
-        await compare(password, hashedPassword);
-
-        next();
-    } catch (err) {
-        res.json(err.message);
-    }};
 
 exports.validateUserId = async (req, res, next) => {
     try {
         const { userId } = req.params;
-        const user = await User.findById(userId);
+        const user = await User.findById(userId).lean();
 
         if (!user) {
-            throw new Error('wrong ID');
+            next(new Err(400, 'wrong ID'));
+
+            return;
         }
 
         req.user = user;
+
         next();
     } catch (err) {
-        res.json(err.message);
+
+        next(new Err(500, err.message));
     }
 };

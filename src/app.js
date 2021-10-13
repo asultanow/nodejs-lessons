@@ -1,21 +1,28 @@
 const express = require('express');
 const mongoose = require('mongoose');
 
-const { MONGODB_CONNECT_URL, PORT } = require('./configs/config');
-const userRouter = require('./routes/user.router');
-const { logIn } = require('./controllers/user.controller');
-const { validateUserLogin, confirmUserLogin } = require('./middlewares/user.middleware');
+const { MONGODB_CONN_URI, PORT } = require('./configs/config');
+const router = require('./routes');
+const { errorMiddleware: { handleNonexistentRoute, handleError } } = require('./middlewares');
 
 const app = express();
 
-mongoose.connect(MONGODB_CONNECT_URL);
+mongoose.connect(MONGODB_CONN_URI, err => {
+    if (err) {
+        console.log(err.message);
+        return;
+    }
+
+    console.log('connected to database');
+});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/users', userRouter);
-app.post('/auth', validateUserLogin, confirmUserLogin, logIn);
+app.use(router);
+app.use(handleNonexistentRoute);
+app.use(handleError);
 
 app.listen(PORT, () => {
-    console.log(`server is listening on port ${PORT}`);
+    console.log(`server running on port ${PORT}`);
 });

@@ -1,4 +1,4 @@
 module.exports = {
-    MONGODB_CONNECT_URL: 'mongodb://localhost:27017/lesson3-hw-users',
-    PORT: 5000
+    MONGODB_CONN_URI: process.env.MONGODB_CONN_URI || 'mongodb://localhost:27017/homework5-users',
+    PORT: process.env.PORT || 5000
 };
