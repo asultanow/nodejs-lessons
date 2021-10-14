@@ -1,9 +1,11 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 
-const { MONGODB_CONN_URI, PORT } = require('./configs/config');
 const router = require('./routes');
-const { errorMiddleware: { handleNonexistentRoute, handleError } } = require('./middlewares');
+const { handleNonexistentRoute, handleError } = require('./middlewares');
+const { MONGODB_CONN_URI, PORT } = require('./configs/config');
 
 const app = express();
 

@@ -2,24 +2,52 @@ const User = require('../dataBase/User');
 const { compare } = require('../services/password.service');
 const Err = require('../errors/Err');
 
-exports.confirmUserLogin = async (req, res, next) => {
+exports.isUserWithEmailPresent = async (req, res, next) => {
     try {
-        const { email, password } = req.body;
-        const user = await User.findOne({ email }).select('+password');
+        const { email } = req.body;
+
+        const user = await User
+            .findOne({ email })
+            .select('+password')
+            .lean();
 
         if (!user) {
-            next(new Err(401, 'wrong email or password'));
 
+            next(new Err('wrong email or password', 401));
             return;
         }
-
-        const { password: hashedPassword } = user;
-        await compare(password, hashedPassword);
 
         req.user = user;
 
         next();
     } catch (err) {
 
-        next(new Err(500, err.message));
-    }};
+        next(err);
+    }
+};
+
+exports.isUserRoleAllowed = (userRoles = []) => (req, res, next) => {
+    const { role } = req.user;
+
+    if (!userRoles.includes(role)) {
+
+        next(new Err('access denied', 403));
+        return;
+    }
+
+    next();
+};
+
+exports.isUserPasswordValid = async (req, res, next) => {
+    try {
+        const { password } = req.body;
+        const { password: hashedPassword } = req.user;
+
+        await compare(password, hashedPassword);
+
+        next();
+    } catch (err) {
+
+        next(err);
+    }
+};

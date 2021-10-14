@@ -1,5 +1,27 @@
+const {
+    createReqBodyValidationMiddleware,
+    isEmailAvailable,
+    isUserWithIdPresent
+} = require('./user.middleware');
+
+const {
+    isUserWithEmailPresent,
+    isUserRoleAllowed,
+    isUserPasswordValid
+} = require('./auth.middleware');
+
+const {
+    handleError,
+    handleNonexistentRoute
+} = require('./error.middleware');
+
 module.exports = {
-    userMiddleware: require('./user.middleware'),
-    authMiddleware: require('./auth.middleware'),
-    errorMiddleware: require('./error.middleware')
+    createReqBodyValidationMiddleware,
+    isEmailAvailable,
+    isUserWithIdPresent,
+    isUserWithEmailPresent,
+    isUserRoleAllowed,
+    isUserPasswordValid,
+    handleError,
+    handleNonexistentRoute
 };

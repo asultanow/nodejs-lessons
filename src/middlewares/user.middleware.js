@@ -8,8 +8,7 @@ exports.createReqBodyValidationMiddleware = ({ validator, errStatus, errMessage 
         const message = errMessage || error.details[0].message;
         const status = errStatus || 400;
 
-        next(new Err(status, message));
-
+        next(new Err(message, status));
         return;
     }
 
@@ -18,32 +17,32 @@ exports.createReqBodyValidationMiddleware = ({ validator, errStatus, errMessage 
     next();
 };
 
-exports.validateUserEmail = async (req, res, next) => {
+exports.isEmailAvailable = async (req, res, next) => {
     try {
         const { email } = req.body;
         const user = await User.findOne({ email });
 
         if (user) {
-            next(new Err(400, 'email already exists'));
 
+            next(new Err('email already exists', 400));
             return;
         }
 
         next();
     } catch (err) {
 
-        next(new Err(500, err.message));
+        next(err);
     }
 };
 
-exports.validateUserId = async (req, res, next) => {
+exports.isUserWithIdPresent = async (req, res, next) => {
     try {
         const { userId } = req.params;
         const user = await User.findById(userId).lean();
 
         if (!user) {
-            next(new Err(400, 'wrong ID'));
 
+            next(new Err('wrong ID', 400));
             return;
         }
 
@@ -52,6 +51,6 @@ exports.validateUserId = async (req, res, next) => {
         next();
     } catch (err) {
 
-        next(new Err(500, err.message));
+        next(err);
     }
 };

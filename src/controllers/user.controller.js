@@ -1,7 +1,6 @@
 const User = require('../dataBase/User');
 const { hash } = require('../services/password.service');
 const { normalizeUser } = require('../utils/user.util');
-const Err = require('../errors/Err');
 
 exports.getUsers = async (req, res, next) => {
     try {
@@ -10,11 +9,12 @@ exports.getUsers = async (req, res, next) => {
         res.json(users);
     } catch (err) {
 
-        next(new Err(500, err.message));
+        next(err);
     }
 };
 
 exports.getUserById = (req, res) => {
+
     res.json(req.user);
 };
 
@@ -27,7 +27,7 @@ exports.createUser = async (req, res, next) => {
         res.json(normalizedUser);
     } catch (err) {
 
-        next(new Err(500, err.message));
+        next(err);
     }
 };
 
@@ -39,7 +39,7 @@ exports.updateUser = async (req, res, next) => {
         res.json(user);
     } catch (err) {
 
-        next(new Err(500, err.message));
+        next(err);
     }
 };
 
@@ -52,6 +52,6 @@ exports.deleteUser = async (req, res, next) => {
         res.json(normalizedUser);
     } catch (err) {
 
-        next(new Err(500, err.message));
+        next(err);
     }
 };

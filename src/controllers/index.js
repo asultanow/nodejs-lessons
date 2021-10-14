@@ -1,4 +1,19 @@
+const {
+    getUsers,
+    getUserById,
+    createUser,
+    updateUser,
+    deleteUser
+} = require('./user.controller');
+
+const { logIn, logOut } = require('./auth.controller');
+
 module.exports = {
-    userController: require('./user.controller'),
-    authController: require('./auth.controller')
+    getUsers,
+    getUserById,
+    createUser,
+    updateUser,
+    deleteUser,
+    logIn,
+    logOut
 };

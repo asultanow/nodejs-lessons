@@ -1,5 +1,5 @@
 module.exports = class Err extends Error {
-    constructor(status, message) {
+    constructor(message, status = 500) {
         super(message);
 
         this.status = status;

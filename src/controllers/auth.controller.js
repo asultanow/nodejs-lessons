@@ -5,3 +5,8 @@ exports.logIn = (req, res) => {
 
     res.json(normalizedUser);
 };
+
+exports.logOut =(req, res) => {
+
+    res.json('logged out');
+};

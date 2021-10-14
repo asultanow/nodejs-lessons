@@ -1,21 +1,17 @@
 const userRouter = require('express').Router();
 
 const {
-    userController: {
-        getUsers,
-        getUserById,
-        createUser,
-        updateUser,
-        deleteUser
-    }
+    getUsers,
+    getUserById,
+    createUser,
+    updateUser,
+    deleteUser
 } = require('../controllers');
 
 const {
-    userMiddleware: {
-        createReqBodyValidationMiddleware,
-        validateUserEmail,
-        validateUserId
-    }
+    createReqBodyValidationMiddleware,
+    isEmailAvailable,
+    isUserWithIdPresent
 } = require('../middlewares');
 
 const { userToCreateValidator, userToUpdateValidator } = require('../validators/user.validator');
@@ -26,11 +22,11 @@ const validateUserToUpdate = createReqBodyValidationMiddleware({ validator: user
 
 userRouter.route('/')
     .get(getUsers)
-    .post(validateUserToCreate, validateUserEmail, createUser);
+    .post(validateUserToCreate, isEmailAvailable, createUser);
 
 userRouter.route('/:userId')
-    .get(validateUserId, getUserById)
-    .put(validateUserToUpdate, validateUserId, updateUser)
-    .delete(validateUserId, deleteUser);
+    .get(isUserWithIdPresent, getUserById)
+    .put(validateUserToUpdate, isUserWithIdPresent, updateUser)
+    .delete(isUserWithIdPresent, deleteUser);
 
 module.exports = userRouter;

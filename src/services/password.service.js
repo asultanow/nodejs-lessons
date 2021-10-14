@@ -7,6 +7,6 @@ exports.compare = async (password, hashedPassword) => {
     const isPasswordMatched = await bcrypt.compare(password, hashedPassword);
 
     if (!isPasswordMatched) {
-        throw new Err(401, 'wrong email or password');
+        throw new Err('wrong email or password', 401);
     }
 };
