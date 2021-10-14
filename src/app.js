@@ -9,14 +9,10 @@ const { MONGODB_CONN_URI, PORT } = require('./configs/config');
 
 const app = express();
 
-mongoose.connect(MONGODB_CONN_URI, err => {
-    if (err) {
-        console.log(err.message);
-        return;
-    }
-
-    console.log('connected to database');
-});
+mongoose
+    .connect(MONGODB_CONN_URI)
+    .then(() => console.log('connected to database'))
+    .catch(err => console.log(err));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -25,6 +21,4 @@ app.use(router);
 app.use(handleNonexistentRoute);
 app.use(handleError);
 
-app.listen(PORT, () => {
-    console.log(`server running on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`server running on port ${PORT}`));

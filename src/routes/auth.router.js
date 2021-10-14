@@ -6,7 +6,7 @@ const {
     createReqBodyValidationMiddleware,
     isUserWithEmailPresent,
     isUserRoleAllowed,
-    isUserPasswordValid
+    isUserPasswordCorrect
 } = require('../middlewares');
 
 const { userLoginValidator } = require('../validators/user.validator');
@@ -23,7 +23,7 @@ authRouter.post(
     validateUserToLogin,
     isUserWithEmailPresent,
     isUserRoleAllowed([ADMIN, MANAGER]),
-    isUserPasswordValid,
+    isUserPasswordCorrect,
     logIn
 );
 

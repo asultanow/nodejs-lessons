@@ -6,7 +6,9 @@ exports.getUsers = async (req, res, next) => {
     try {
         const users = await User.find().lean();
 
-        res.json(users);
+        res
+            .status(200)
+            .json(users);
     } catch (err) {
 
         next(err);
@@ -15,7 +17,9 @@ exports.getUsers = async (req, res, next) => {
 
 exports.getUserById = (req, res) => {
 
-    res.json(req.user);
+    res
+        .status(200)
+        .json(req.user);
 };
 
 exports.createUser = async (req, res, next) => {
@@ -24,7 +28,9 @@ exports.createUser = async (req, res, next) => {
         const user = await User.create({ ...req.body, password: hashedPassword });
         const normalizedUser = normalizeUser(user);
 
-        res.json(normalizedUser);
+        res
+            .status(201)
+            .json(normalizedUser);
     } catch (err) {
 
         next(err);
@@ -34,9 +40,11 @@ exports.createUser = async (req, res, next) => {
 exports.updateUser = async (req, res, next) => {
     try {
         const { userId } = req.params;
-        const user = await User.findByIdAndUpdate(userId, req.body).lean();
+        const user = await User.findByIdAndUpdate(userId, req.body, { new: true }).lean();
 
-        res.json(user);
+        res
+            .status(200)
+            .json(user);
     } catch (err) {
 
         next(err);
@@ -49,7 +57,9 @@ exports.deleteUser = async (req, res, next) => {
         const user = await User.findByIdAndDelete(userId);
         const normalizedUser = normalizeUser(user);
 
-        res.json(normalizedUser);
+        res
+            .status(200)
+            .json(normalizedUser);
     } catch (err) {
 
         next(err);

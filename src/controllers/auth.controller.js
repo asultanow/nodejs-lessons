@@ -3,10 +3,14 @@ const { normalizeUser } = require('../utils/user.util');
 exports.logIn = (req, res) => {
     const normalizedUser = normalizeUser(req.user);
 
-    res.json(normalizedUser);
+    res
+        .status(200)
+        .json(normalizedUser);
 };
 
 exports.logOut =(req, res) => {
 
-    res.json('logged out');
+    res
+        .status(200)
+        .json('logged out');
 };

@@ -38,7 +38,7 @@ exports.isUserRoleAllowed = (userRoles = []) => (req, res, next) => {
     next();
 };
 
-exports.isUserPasswordValid = async (req, res, next) => {
+exports.isUserPasswordCorrect = async (req, res, next) => {
     try {
         const { password } = req.body;
         const { password: hashedPassword } = req.user;

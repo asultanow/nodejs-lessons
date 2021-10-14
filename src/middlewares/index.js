@@ -7,7 +7,7 @@ const {
 const {
     isUserWithEmailPresent,
     isUserRoleAllowed,
-    isUserPasswordValid
+    isUserPasswordCorrect
 } = require('./auth.middleware');
 
 const {
@@ -21,7 +21,7 @@ module.exports = {
     isUserWithIdPresent,
     isUserWithEmailPresent,
     isUserRoleAllowed,
-    isUserPasswordValid,
+    isUserPasswordCorrect,
     handleError,
     handleNonexistentRoute
 };
