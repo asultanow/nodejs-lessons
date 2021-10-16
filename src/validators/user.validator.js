@@ -37,7 +37,7 @@ exports.userToUpdateValidator = Joi.object({
         .max(30)
 });
 
-exports.userLoginValidator = Joi.object({
+exports.userToAuthValidator = Joi.object({
     email: Joi
         .string()
         .required()
