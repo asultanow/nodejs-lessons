@@ -1,25 +1,21 @@
 const User = require('../dataBase/User');
 const { hash } = require('../services/password.service');
 const { normalizeUser } = require('../utils/user.util');
+const { CREATED } = require('../configs/status-codes.enum');
 
 exports.getUsers = async (req, res, next) => {
     try {
         const users = await User.find().lean();
 
-        res
-            .status(200)
-            .json(users);
+        res.json(users);
     } catch (err) {
-
         next(err);
     }
 };
 
 exports.getUserById = (req, res) => {
 
-    res
-        .status(200)
-        .json(req.user);
+    res.json(req.user);
 };
 
 exports.createUser = async (req, res, next) => {
@@ -29,10 +25,9 @@ exports.createUser = async (req, res, next) => {
         const normalizedUser = normalizeUser(user);
 
         res
-            .status(201)
+            .status(CREATED)
             .json(normalizedUser);
     } catch (err) {
-
         next(err);
     }
 };
@@ -43,10 +38,9 @@ exports.updateUser = async (req, res, next) => {
         const user = await User.findByIdAndUpdate(userId, req.body, { new: true }).lean();
 
         res
-            .status(200)
+            .status(CREATED)
             .json(user);
     } catch (err) {
-
         next(err);
     }
 };
@@ -57,11 +51,8 @@ exports.deleteUser = async (req, res, next) => {
         const user = await User.findByIdAndDelete(userId);
         const normalizedUser = normalizeUser(user);
 
-        res
-            .status(200)
-            .json(normalizedUser);
+        res.json(normalizedUser);
     } catch (err) {
-
         next(err);
     }
 };

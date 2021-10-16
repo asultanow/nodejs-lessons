@@ -5,6 +5,7 @@ const {
 } = require('./user.middleware');
 
 const {
+    validateUserToAuth,
     isUserWithEmailPresent,
     isUserRoleAllowed,
     isUserPasswordCorrect
@@ -19,6 +20,7 @@ module.exports = {
     createReqBodyValidationMiddleware,
     isEmailAvailable,
     isUserWithIdPresent,
+    validateUserToAuth,
     isUserWithEmailPresent,
     isUserRoleAllowed,
     isUserPasswordCorrect,

@@ -1,19 +1,16 @@
 const User = require('../dataBase/User');
 const Err = require('../errors/Err');
+const { EMAIL_ALREADY_EXISTS, WRONG_ID } = require('../configs/error-messages.enum');
+const { BAD_REQUEST } = require('../configs/status-codes.enum');
 
-exports.createReqBodyValidationMiddleware = ({ validator, errStatus, errMessage }) => (req, res, next) => {
+exports.createReqBodyValidationMiddleware = validator => (req, res, next) => {
     const { error, value } = validator.validate(req.body);
 
-    if (error) {
-        const message = errMessage || error.details[0].message;
-        const status = errStatus || 400;
-
-        next(new Err(message, status));
-        return;
+    if (error) {        
+        return next(new Err(error.details[0].message, BAD_REQUEST));
     }
 
     req.body = value;
-
     next();
 };
 
@@ -23,14 +20,11 @@ exports.isEmailAvailable = async (req, res, next) => {
         const user = await User.findOne({ email });
 
         if (user) {
-
-            next(new Err('email already exists', 400));
-            return;
+            return next(new Err(EMAIL_ALREADY_EXISTS, BAD_REQUEST));
         }
 
         next();
     } catch (err) {
-
         next(err);
     }
 };
@@ -41,16 +35,12 @@ exports.isUserWithIdPresent = async (req, res, next) => {
         const user = await User.findById(userId).lean();
 
         if (!user) {
-
-            next(new Err('wrong ID', 400));
-            return;
+            return next(new Err(WRONG_ID, BAD_REQUEST));
         }
 
         req.user = user;
-
         next();
     } catch (err) {
-
         next(err);
     }
 };

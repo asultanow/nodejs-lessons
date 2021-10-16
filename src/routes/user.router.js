@@ -16,9 +16,8 @@ const {
 
 const { userToCreateValidator, userToUpdateValidator } = require('../validators/user.validator');
 
-const validateUserToCreate = createReqBodyValidationMiddleware({ validator: userToCreateValidator });
-
-const validateUserToUpdate = createReqBodyValidationMiddleware({ validator: userToUpdateValidator });
+const validateUserToCreate = createReqBodyValidationMiddleware(userToCreateValidator);
+const validateUserToUpdate = createReqBodyValidationMiddleware(userToUpdateValidator);
 
 userRouter.route('/')
     .get(getUsers)
