@@ -1,5 +1,4 @@
-const User = require('../dataBase');
-const OAuth = require('../dataBase');
+const { User, OAuth } = require('../dataBase');
 const { hashPassword } = require('../services');
 const { normalizeUser } = require('../utils/user.util');
 const { CREATED } = require('../configs/status-codes.enum');

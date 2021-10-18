@@ -1,6 +1,4 @@
-// const {  } = require('../dataBase');
-const User = require('../dataBase');
-const OAuth = require('../dataBase');
+const { User, OAuth } = require('../dataBase');
 const { comparePassword } = require('../services');
 const Err = require('../errors/Err');
 const { ACCESS_DENIED, WRONG_EMAIL_OR_PASSWORD, INVALID_TOKEN } = require('../configs/error-messages.enum');

@@ -1,6 +1,6 @@
 const { normalizeUser } = require('../utils/user.util');
 const { generateTokenPair } = require('../services');
-const OAuth = require('../dataBase');
+const { OAuth } = require('../dataBase');
 const { AUTHORIZATION } = require('../configs/constants');
 
 exports.logIn = async (req, res, next) => {

@@ -1,4 +1,4 @@
-const User = require('../dataBase');
+const { User } = require('../dataBase');
 const Err = require('../errors/Err');
 const { EMAIL_ALREADY_EXISTS, WRONG_ID } = require('../configs/error-messages.enum');
 const { BAD_REQUEST } = require('../configs/status-codes.enum');
