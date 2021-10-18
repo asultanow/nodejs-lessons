@@ -7,7 +7,8 @@ const {
     isUserWithEmailPresent,
     isUserRoleAllowed,
     isUserPasswordCorrect,
-    checkAccessToken
+    checkAccessToken,
+    checkRefreshToken
 } = require('../middlewares');
 
 const { ADMIN, MANAGER } = require('../configs/user-roles.enum');
@@ -21,7 +22,7 @@ authRouter.post(
     logIn
 );
 
-authRouter.post('/refresh', checkAccessToken, logIn);
+authRouter.post('/refresh', checkRefreshToken, logIn);
 authRouter.post('/logout', checkAccessToken, logOut);
 
 module.exports = authRouter;

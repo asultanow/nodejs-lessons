@@ -9,7 +9,8 @@ const {
     isUserWithEmailPresent,
     isUserRoleAllowed,
     isUserPasswordCorrect,
-    checkAccessToken
+    checkAccessToken,
+    checkRefreshToken
 } = require('./auth.middleware');
 
 const {
@@ -27,5 +28,6 @@ module.exports = {
     isUserPasswordCorrect,
     handleError,
     handleNonexistentRoute,
-    checkAccessToken
+    checkAccessToken,
+    checkRefreshToken
 };
