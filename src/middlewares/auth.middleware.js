@@ -70,7 +70,8 @@ exports.checkAccessToken = async (req, res, next) => {
         }
 
         await verifyToken(token, ACCESS);
-        const tokenResponse = OAuth
+
+        const tokenResponse = await OAuth
             .findOne({ access_token: token })
             .populate('user_id')
             .lean();
@@ -96,7 +97,7 @@ exports.checkRefreshToken = async (req, res, next) => {
 
         await verifyToken(token, REFRESH);
 
-        const tokenResponse = OAuth
+        const tokenResponse = await OAuth
             .findOne({ refresh_token: token })
             .populate('user_id')
             .lean();
