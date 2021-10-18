@@ -11,7 +11,8 @@ const {
 const {
     createReqBodyValidationMiddleware,
     isEmailAvailable,
-    isUserWithIdPresent
+    isUserWithIdPresent,
+    checkAccessToken
 } = require('../middlewares');
 
 const { userToCreateValidator, userToUpdateValidator } = require('../validators/user.validator');
@@ -26,6 +27,6 @@ userRouter.route('/')
 userRouter.route('/:userId')
     .get(isUserWithIdPresent, getUserById)
     .put(validateUserToUpdate, isUserWithIdPresent, updateUser)
-    .delete(isUserWithIdPresent, deleteUser);
+    .delete(isUserWithIdPresent, checkAccessToken, deleteUser);
 
 module.exports = userRouter;

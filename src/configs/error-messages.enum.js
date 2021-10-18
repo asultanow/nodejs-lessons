@@ -3,5 +3,6 @@ module.exports = {
     ACCESS_DENIED: 'access denied',
     PAGE_NOT_FOUND: 'page not found',
     EMAIL_ALREADY_EXISTS: 'email already exists',
-    WRONG_ID: 'wrong ID'
+    WRONG_ID: 'wrong ID',
+    INVALID_TOKEN: 'invalid token'
 };

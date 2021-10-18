@@ -1,5 +1,6 @@
-const User = require('../dataBase/User');
-const { hash } = require('../services/password.service');
+const User = require('../dataBase');
+const OAuth = require('../dataBase');
+const { hashPassword } = require('../services');
 const { normalizeUser } = require('../utils/user.util');
 const { CREATED } = require('../configs/status-codes.enum');
 
@@ -20,7 +21,7 @@ exports.getUserById = (req, res) => {
 
 exports.createUser = async (req, res, next) => {
     try {
-        const hashedPassword = await hash(req.body.password);
+        const hashedPassword = await hashPassword(req.body.password);
         const user = await User.create({ ...req.body, password: hashedPassword });
         const normalizedUser = normalizeUser(user);
 
@@ -49,6 +50,7 @@ exports.deleteUser = async (req, res, next) => {
     try {
         const { userId } = req.params;
         const user = await User.findByIdAndDelete(userId);
+        await OAuth.deleteOne({ user_id: userId });
         const normalizedUser = normalizeUser(user);
 
         res.json(normalizedUser);
