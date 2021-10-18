@@ -49,7 +49,7 @@ exports.deleteUser = async (req, res, next) => {
     try {
         const { userId } = req.params;
         const user = await User.findByIdAndDelete(userId);
-        await OAuth.deleteOne({ user_id: userId });
+        await OAuth.deleteMany({ user_id: userId });
         const normalizedUser = normalizeUser(user);
 
         res.json(normalizedUser);

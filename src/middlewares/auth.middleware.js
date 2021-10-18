@@ -106,7 +106,7 @@ exports.checkRefreshToken = async (req, res, next) => {
             next(new Err(INVALID_TOKEN, UNATHORIZED));
         }
 
-        OAuth.remove({ refresh_token: token });
+        await OAuth.deleteOne({ refresh_token: token });
         req.user = tokenResponse.user_id;
         next();
     } catch (err){

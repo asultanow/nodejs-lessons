@@ -20,7 +20,7 @@ exports.logOut = async (req, res, next) => {
     try {
         const token = req.get(AUTHORIZATION);
 
-        await OAuth.deleteOne({ token });
+        await OAuth.deleteOne({ access_token: token });
 
         res.json('logged out');
     } catch (err) {
