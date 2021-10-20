@@ -3,7 +3,7 @@ const Err = require('../errors/Err');
 const { EMAIL_ALREADY_EXISTS, WRONG_ID } = require('../configs/error-messages.enum');
 const { BAD_REQUEST_400 } = require('../configs/status-codes.enum');
 
-exports.createReqBodyValidationMiddleware = validator => (req, res, next) => {
+exports.validateRequestBody = validator => (req, res, next) => {
     const { error, value } = validator.validate(req.body);
 
     if (error) {        
