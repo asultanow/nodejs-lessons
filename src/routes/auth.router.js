@@ -1,6 +1,6 @@
 const authRouter = require('express').Router();
 
-const { logIn, logOut } = require('../controllers');
+const { logIn, logOut, refreshToken } = require('../controllers');
 
 const {
     validateUserToAuth,
@@ -11,18 +11,18 @@ const {
     checkRefreshToken
 } = require('../middlewares');
 
-const { ADMIN, MANAGER } = require('../configs/user-roles.enum');
+const { ADMIN, USER, MANAGER } = require('../configs/user-roles.enum');
 
 authRouter.post(
     '/',
     validateUserToAuth,
     isUserWithEmailPresent,
-    isUserRoleAllowed([ADMIN, MANAGER]),
+    isUserRoleAllowed([ADMIN, USER, MANAGER]),
     isUserPasswordCorrect,
     logIn
 );
 
-authRouter.post('/refresh', checkRefreshToken, logIn);
+authRouter.post('/refresh', checkRefreshToken, refreshToken);
 authRouter.post('/logout', checkAccessToken, logOut);
 
 module.exports = authRouter;

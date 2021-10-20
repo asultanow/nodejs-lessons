@@ -26,7 +26,7 @@ userRouter.route('/')
 
 userRouter.route('/:userId')
     .get(isUserWithIdPresent, getUserById)
-    .put(validateUserToUpdate, isUserWithIdPresent, updateUser)
+    .put(validateUserToUpdate, isUserWithIdPresent, checkAccessToken, updateUser)
     .delete(isUserWithIdPresent, checkAccessToken, deleteUser);
 
 module.exports = userRouter;

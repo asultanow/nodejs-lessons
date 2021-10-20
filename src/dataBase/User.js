@@ -1,5 +1,6 @@
 const { Schema, model } = require('mongoose');
 
+const { USER } = require('../configs/models.enum');
 const userRoles = require('../configs/user-roles.enum');
 
 const UserSchema = new Schema({
@@ -32,4 +33,4 @@ const UserSchema = new Schema({
     }
 }, { timestamps: true });
 
-module.exports = model('User', UserSchema);
+module.exports = model(USER, UserSchema);
