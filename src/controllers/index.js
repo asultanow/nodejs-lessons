@@ -6,7 +6,7 @@ const {
     deleteUser
 } = require('./user.controller');
 
-const { logIn, logOut } = require('./auth.controller');
+const { logIn, logOut, refreshToken } = require('./auth.controller');
 
 module.exports = {
     getUsers,
@@ -15,5 +15,6 @@ module.exports = {
     updateUser,
     deleteUser,
     logIn,
-    logOut
+    logOut,
+    refreshToken
 };

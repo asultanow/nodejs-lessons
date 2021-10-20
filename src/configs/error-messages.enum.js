@@ -4,5 +4,6 @@ module.exports = {
     PAGE_NOT_FOUND: 'page not found',
     EMAIL_ALREADY_EXISTS: 'email already exists',
     WRONG_ID: 'wrong ID',
-    INVALID_TOKEN: 'invalid token'
+    INVALID_TOKEN: 'invalid token',
+    WRONG_EMAIL_ACTION: 'wrong email action'
 };

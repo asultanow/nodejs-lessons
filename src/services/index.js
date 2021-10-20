@@ -1,9 +1,11 @@
-const { hashPassword, comparePassword } = require('./password.service');
+const { sendEmail } = require('./email.service');
 const { generateTokenPair, verifyToken } = require('./jwt.service');
+const { hashPassword, comparePassword } = require('./password.service');
 
 module.exports = {
-    hashPassword,
-    comparePassword,
+    sendEmail,
     generateTokenPair,
-    verifyToken
+    verifyToken,
+    hashPassword,
+    comparePassword
 };

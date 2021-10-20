@@ -2,7 +2,7 @@ const { User, OAuth } = require('../dataBase');
 const { comparePassword } = require('../services');
 const Err = require('../errors/Err');
 const { ACCESS_DENIED, WRONG_EMAIL_OR_PASSWORD, INVALID_TOKEN } = require('../configs/error-messages.enum');
-const { BAD_REQUEST, FORBIDDEN, UNATHORIZED } = require('../configs/status-codes.enum');
+const { BAD_REQUEST_400, FORBIDDEN_403, UNATHORIZED_401 } = require('../configs/status-codes.enum');
 const { ACCESS, REFRESH } = require('../configs/tokenTypes.enum');
 const { AUTHORIZATION } = require('../configs/constants');
 const { userToAuthValidator } = require('../validators/user.validator');
@@ -12,7 +12,7 @@ exports.validateUserToAuth = (req, res, next) => {
     const { error, value } = userToAuthValidator.validate(req.body);
 
     if (error) {
-        return next(new Err(WRONG_EMAIL_OR_PASSWORD, BAD_REQUEST));
+        return next(new Err(WRONG_EMAIL_OR_PASSWORD, BAD_REQUEST_400));
     }
 
     req.body = value;
@@ -29,7 +29,7 @@ exports.isUserWithEmailPresent = async (req, res, next) => {
             .lean();
             
         if (!user) {
-            return next(new Err(WRONG_EMAIL_OR_PASSWORD, BAD_REQUEST));
+            return next(new Err(WRONG_EMAIL_OR_PASSWORD, BAD_REQUEST_400));
         }
 
         req.user = user;
@@ -43,7 +43,7 @@ exports.isUserRoleAllowed = (userRoles = []) => (req, res, next) => {
     const { role } = req.user;
 
     if (!userRoles.includes(role)) {
-        return next(new Err(ACCESS_DENIED, FORBIDDEN));
+        return next(new Err(ACCESS_DENIED, FORBIDDEN_403));
     }
 
     next();
@@ -66,7 +66,7 @@ exports.checkAccessToken = async (req, res, next) => {
         const token = req.get(AUTHORIZATION);
 
         if (!token) {
-            next(new Err(INVALID_TOKEN, UNATHORIZED));
+            return next(new Err(INVALID_TOKEN, UNATHORIZED_401));
         }
 
         await verifyToken(token, ACCESS);
@@ -77,7 +77,7 @@ exports.checkAccessToken = async (req, res, next) => {
             .lean();
 
         if (!tokenResponse) {
-            next(new Err(INVALID_TOKEN, UNATHORIZED));
+            return next(new Err(INVALID_TOKEN, UNATHORIZED_401));
         }
 
         req.user = tokenResponse.user_id;
@@ -92,7 +92,7 @@ exports.checkRefreshToken = async (req, res, next) => {
         const token = req.get(AUTHORIZATION);
 
         if (!token) {
-            next(new Err(INVALID_TOKEN, UNATHORIZED));
+            return next(new Err(INVALID_TOKEN, UNATHORIZED_401));
         }
 
         await verifyToken(token, REFRESH);
@@ -103,10 +103,9 @@ exports.checkRefreshToken = async (req, res, next) => {
             .lean();
 
         if (!tokenResponse) {
-            next(new Err(INVALID_TOKEN, UNATHORIZED));
+            return next(new Err(INVALID_TOKEN, UNATHORIZED_401));
         }
 
-        await OAuth.deleteOne({ refresh_token: token });
         req.user = tokenResponse.user_id;
         next();
     } catch (err){

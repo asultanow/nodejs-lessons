@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 
 const Err = require('../errors/Err');
 const { INVALID_TOKEN } = require('../configs/error-messages.enum');
-const { UNATHORIZED } = require('../configs/status-codes.enum');
+const { UNATHORIZED_401 } = require('../configs/status-codes.enum');
 const { ACCESS } = require('../configs/tokenTypes.enum');
 const { JWT_ACCESS_SECRET, JWT_REFRESH_SECRET } = require('../configs/config');
 
@@ -19,6 +19,6 @@ exports.verifyToken = async (token, tokenType) => {
 
         await jwt.verify(token, secret);
     } catch (err) {
-        throw new Err(INVALID_TOKEN, UNATHORIZED);
+        throw new Err(INVALID_TOKEN, UNATHORIZED_401);
     }
 };
