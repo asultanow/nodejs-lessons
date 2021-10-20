@@ -9,7 +9,7 @@ const {
 } = require('../controllers');
 
 const {
-    createReqBodyValidationMiddleware,
+    validateRequestBody,
     isEmailAvailable,
     isUserWithIdPresent,
     checkAccessToken
@@ -17,16 +17,13 @@ const {
 
 const { userToCreateValidator, userToUpdateValidator } = require('../validators/user.validator');
 
-const validateUserToCreate = createReqBodyValidationMiddleware(userToCreateValidator);
-const validateUserToUpdate = createReqBodyValidationMiddleware(userToUpdateValidator);
-
 userRouter.route('/')
     .get(getUsers)
-    .post(validateUserToCreate, isEmailAvailable, createUser);
+    .post(validateRequestBody(userToCreateValidator), isEmailAvailable, createUser);
 
 userRouter.route('/:userId')
     .get(isUserWithIdPresent, getUserById)
-    .put(validateUserToUpdate, isUserWithIdPresent, checkAccessToken, updateUser)
+    .put(validateRequestBody(userToUpdateValidator), isUserWithIdPresent, checkAccessToken, updateUser)
     .delete(isUserWithIdPresent, checkAccessToken, deleteUser);
 
 module.exports = userRouter;

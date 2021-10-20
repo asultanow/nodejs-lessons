@@ -1,5 +1,5 @@
 const {
-    createReqBodyValidationMiddleware,
+    validateRequestBody,
     isEmailAvailable,
     isUserWithIdPresent
 } = require('./user.middleware');
@@ -19,7 +19,7 @@ const {
 } = require('./error.middleware');
 
 module.exports = {
-    createReqBodyValidationMiddleware,
+    validateRequestBody,
     isEmailAvailable,
     isUserWithIdPresent,
     validateUserToAuth,
