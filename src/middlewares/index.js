@@ -10,7 +10,8 @@ const {
     isUserRoleAllowed,
     isUserPasswordCorrect,
     checkAccessToken,
-    checkRefreshToken
+    checkRefreshToken,
+    validateActionTokenMW
 } = require('./auth.middleware');
 
 const {
@@ -29,5 +30,6 @@ module.exports = {
     handleError,
     handleNonexistentRoute,
     checkAccessToken,
-    checkRefreshToken
+    checkRefreshToken,
+    validateActionTokenMW
 };

@@ -1,7 +1,9 @@
 const {
     CREATED_USER,
     UPDATED_USER,
-    DELETED_USER
+    DELETED_USER,
+    FORGOT_PASSWORD,
+    RESET_PASSWORD
 } = require('../configs/email-actions.enum');
 
 module.exports = {
@@ -16,5 +18,13 @@ module.exports = {
     [DELETED_USER]: {
         templateName: 'deletedUser',
         subject: 'Deleted account'
+    },
+    [FORGOT_PASSWORD]: {
+        templateName: 'forgotPassword',
+        subject: 'Forgotten password'
+    },
+    [RESET_PASSWORD]: {
+        templateName: 'resetPassword',
+        subject: 'New password'
     }
 };

@@ -1,9 +1,10 @@
-const { User, OAuth } = require('../dataBase');
+const { User, OAuth, ActionToken } = require('../dataBase');
 const { comparePassword } = require('../services');
 const Err = require('../errors/Err');
 const { ACCESS_DENIED, WRONG_EMAIL_OR_PASSWORD, INVALID_TOKEN } = require('../configs/error-messages.enum');
 const { BAD_REQUEST_400, FORBIDDEN_403, UNATHORIZED_401 } = require('../configs/status-codes.enum');
 const { ACCESS, REFRESH } = require('../configs/tokenTypes.enum');
+const actionTokenTypes = require('../configs/actionTokenTypes.enum');
 const { AUTHORIZATION } = require('../configs/constants');
 const { userToAuthValidator } = require('../validators/user.validator');
 const { verifyToken } = require('../services');
@@ -99,6 +100,32 @@ exports.checkRefreshToken = async (req, res, next) => {
 
         const tokenResponse = await OAuth
             .findOne({ refresh_token: token })
+            .populate('user_id')
+            .lean();
+
+        if (!tokenResponse) {
+            return next(new Err(INVALID_TOKEN, UNATHORIZED_401));
+        }
+
+        req.user = tokenResponse.user_id;
+        next();
+    } catch (err){
+        next(err);
+    }
+};
+
+exports.validateActionTokenMW = async (req, res, next) => {
+    try {
+        const token = req.get(AUTHORIZATION);
+
+        if (!token) {
+            return next(new Err(INVALID_TOKEN, UNATHORIZED_401));
+        }
+
+        await verifyToken(token, actionTokenTypes.FORGOT_PASSWORD);
+
+        const tokenResponse = await ActionToken
+            .findOne({ action_token: token })
             .populate('user_id')
             .lean();
 

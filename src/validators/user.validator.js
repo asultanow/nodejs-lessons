@@ -49,3 +49,19 @@ exports.userToAuthValidator = Joi.object({
         .trim()
         .regex(PASSWORD_REGEXP)
 });
+
+exports.userEmailValidator = Joi.object({
+    email: Joi
+        .string()
+        .required()
+        .trim()
+        .regex(EMAIL_REGEXP)
+});
+
+exports.userPasswordValidator = Joi.object({
+    password: Joi
+        .string()
+        .required()
+        .trim()
+        .regex(PASSWORD_REGEXP)
+});
