@@ -114,7 +114,7 @@ exports.checkRefreshToken = async (req, res, next) => {
     }
 };
 
-exports.validateActionTokenMW = async (req, res, next) => {
+exports.checkActionToken = async (req, res, next) => {
     try {
         const token = req.get(AUTHORIZATION);
 

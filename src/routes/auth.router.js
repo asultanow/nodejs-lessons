@@ -17,7 +17,7 @@ const {
     isUserPasswordCorrect,
     checkAccessToken,
     checkRefreshToken,
-    validateActionTokenMW
+    checkActionToken
 } = require('../middlewares');
 
 const { userEmailValidator, userPasswordValidator } = require('../validators/user.validator');
@@ -43,6 +43,6 @@ authRouter.post(
     isUserWithEmailPresent,
     setActionToken
 );
-authRouter.post('/password/reset', validateRequestBody(userPasswordValidator), validateActionTokenMW, resetPassword);
+authRouter.post('/password/reset', validateRequestBody(userPasswordValidator), checkActionToken, resetPassword);
 
 module.exports = authRouter;

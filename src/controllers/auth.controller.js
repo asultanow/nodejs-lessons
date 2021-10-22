@@ -1,11 +1,11 @@
 const { normalizeUser } = require('../utils/user.util');
-const { generateTokenPair, generateActionToken, verifyToken, sendEmail, hashPassword} = require('../services');
+const { generateTokenPair, generateActionToken, verifyToken, sendEmail, hashPassword } = require('../services');
 const { OAuth, ActionToken, User} = require('../dataBase');
 const { AUTHORIZATION } = require('../configs/constants');
-const { NO_CONTENT_204, CREATED_201} = require('../configs/status-codes.enum');
+const { NO_CONTENT_204 } = require('../configs/status-codes.enum');
 const actionTokenTypes = require('../configs/actionTokenTypes.enum');
 const emailActions = require('../configs/email-actions.enum');
-const { RESET_PASSWORD} = require('../configs/email-actions.enum');
+const { RESET_PASSWORD } = require('../configs/email-actions.enum');
 
 exports.logIn = async (req, res, next) => {
     try {
@@ -77,18 +77,22 @@ exports.validateActionToken = async (req, res, next) => {
 
 exports.resetPassword = async (req, res, next) => {
     try {
+        const token = req.get(AUTHORIZATION);
         const { password } = req.body;
         const { _id, name, email } = req.user;
-        const hashedPassword = await hashPassword(password);
 
+        const hashedPassword = await hashPassword(password);
+        const tokenPair = generateTokenPair();
         const updatedUser = await User
             .findByIdAndUpdate(_id, { password: hashedPassword }, { new: true })
             .lean();
+
+        await ActionToken.deleteOne({ action_token: token });
+        await OAuth.deleteMany({ user_id: _id });
+        await OAuth.create({ ...tokenPair, user_id: _id });
         await sendEmail(email, RESET_PASSWORD, { name });
 
-        res
-            .status(CREATED_201)
-            .json(updatedUser);
+        res.json({ user: updatedUser, ...tokenPair });
     } catch (err) {
         next(err);
     }

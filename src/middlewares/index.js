@@ -11,7 +11,7 @@ const {
     isUserPasswordCorrect,
     checkAccessToken,
     checkRefreshToken,
-    validateActionTokenMW
+    checkActionToken
 } = require('./auth.middleware');
 
 const {
@@ -31,5 +31,5 @@ module.exports = {
     handleNonexistentRoute,
     checkAccessToken,
     checkRefreshToken,
-    validateActionTokenMW
+    checkActionToken
 };
