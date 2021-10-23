@@ -26,9 +26,8 @@ exports.isUserWithEmailPresent = async (req, res, next) => {
 
         const user = await User
             .findOne({ email })
-            .select('+password')
-            .lean();
-            
+            .select('+password');
+
         if (!user) {
             return next(new Err(WRONG_EMAIL_OR_PASSWORD, BAD_REQUEST_400));
         }
@@ -73,9 +72,7 @@ exports.checkAccessToken = async (req, res, next) => {
         await verifyToken(token, ACCESS);
 
         const tokenResponse = await OAuth
-            .findOne({ access_token: token })
-            .populate('user_id')
-            .lean();
+            .findOne({ access_token: token });
 
         if (!tokenResponse) {
             return next(new Err(INVALID_TOKEN, UNATHORIZED_401));
@@ -99,9 +96,7 @@ exports.checkRefreshToken = async (req, res, next) => {
         await verifyToken(token, REFRESH);
 
         const tokenResponse = await OAuth
-            .findOne({ refresh_token: token })
-            .populate('user_id')
-            .lean();
+            .findOne({ refresh_token: token });
 
         if (!tokenResponse) {
             return next(new Err(INVALID_TOKEN, UNATHORIZED_401));
@@ -125,9 +120,7 @@ exports.checkActionToken = async (req, res, next) => {
         await verifyToken(token, actionTokenTypes.FORGOT_PASSWORD);
 
         const tokenResponse = await ActionToken
-            .findOne({ action_token: token })
-            .populate('user_id')
-            .lean();
+            .findOne({ action_token: token });
 
         if (!tokenResponse) {
             return next(new Err(INVALID_TOKEN, UNATHORIZED_401));

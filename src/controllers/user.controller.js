@@ -1,12 +1,11 @@
 const { User, OAuth } = require('../dataBase');
-const { hashPassword, sendEmail } = require('../services');
-const { normalizeUser } = require('../utils/user.util');
+const { sendEmail } = require('../services');
 const { CREATED_201, NO_CONTENT_204 } = require('../configs/status-codes.enum');
 const { CREATED_USER, UPDATED_USER, DELETED_USER } = require('../configs/email-actions.enum');
 
 exports.getUsers = async (req, res, next) => {
     try {
-        const users = await User.find().lean();
+        const users = await User.find();
 
         res.json(users);
     } catch (err) {
@@ -21,11 +20,8 @@ exports.getUserById = (req, res) => {
 
 exports.createUser = async (req, res, next) => {
     try {
-        const { password } = req.body;
-        const hashedPassword = await hashPassword(password);
-
-        const createdUser = await User.create({ ...req.body, password: hashedPassword });
-        const normalizedUser = normalizeUser(createdUser);
+        const createdUser = await User.createUserWithHashedPassword(req.body);
+        const normalizedUser = createdUser.normalize();
 
         const { name, email } = normalizedUser;
         await sendEmail(email, CREATED_USER, { name });
@@ -41,7 +37,7 @@ exports.createUser = async (req, res, next) => {
 exports.updateUser = async (req, res, next) => {
     try {
         const { userId } = req.params;
-        const updatedUser = await User.findByIdAndUpdate(userId, req.body, { new: true }).lean();
+        const updatedUser = await User.findByIdAndUpdate(userId, req.body, { new: true });
 
         const { name, email } = updatedUser;
         await sendEmail(email, UPDATED_USER, { name });
@@ -57,7 +53,7 @@ exports.updateUser = async (req, res, next) => {
 exports.deleteUser = async (req, res, next) => {
     try {
         const { userId } = req.params;
-        const deletedUser = await User.findByIdAndDelete(userId).lean();
+        const deletedUser = await User.findByIdAndDelete(userId);
         await OAuth.deleteMany({ user_id: userId });
 
         const { name, email } = deletedUser;

@@ -11,6 +11,12 @@ exports.userToCreateValidator = Joi.object({
         .alphanum()
         .min(2)
         .max(30),
+    last_name: Joi
+        .string()
+        .trim()
+        .alphanum()
+        .min(2)
+        .max(30),
     email: Joi
         .string()
         .required()
@@ -34,7 +40,13 @@ exports.userToUpdateValidator = Joi.object({
         .trim()
         .alphanum()
         .min(2)
-        .max(30)
+        .max(30),
+    last_name: Joi
+        .string()
+        .trim()
+        .alphanum()
+        .min(2)
+        .max(30),
 });
 
 exports.userToAuthValidator = Joi.object({

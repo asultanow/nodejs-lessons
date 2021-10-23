@@ -32,7 +32,7 @@ exports.isEmailAvailable = async (req, res, next) => {
 exports.isUserWithIdPresent = async (req, res, next) => {
     try {
         const { userId } = req.params;
-        const user = await User.findById(userId).lean();
+        const user = await User.findById(userId);
 
         if (!user) {
             return next(new Err(WRONG_ID, BAD_REQUEST_400));

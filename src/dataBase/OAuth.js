@@ -2,7 +2,7 @@ const { Schema, model } = require('mongoose');
 
 const { O_AUTH, USER } = require('../configs/models.enum');
 
-const OAuth = new Schema({
+const OAuthSchema = new Schema({
     access_token: {
         type: String,
         required: true,
@@ -22,6 +22,14 @@ const OAuth = new Schema({
         type: Number,
         select: false
     }
-}, { timestamps: true });
+}, {
+    timestamps: true,
+    toObject: { virtuals: true },
+    toJSON: { virtuals: true }
+});
 
-module.exports = model(O_AUTH, OAuth);
+OAuthSchema.pre('findOne', function() {
+    this.populate('user_id');
+});
+
+module.exports = model(O_AUTH, OAuthSchema);
